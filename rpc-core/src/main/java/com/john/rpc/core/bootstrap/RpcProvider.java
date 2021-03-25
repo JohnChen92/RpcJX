@@ -15,6 +15,10 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.timeout.IdleStateHandler;
+import java.util.concurrent.TimeUnit;
 
 public class RpcProvider {
 
@@ -32,18 +36,19 @@ public class RpcProvider {
       ServerBootstrap b = new ServerBootstrap();
       b.group(bossGroup, workerGroup)
           .channel(NioServerSocketChannel.class)
+          .option(ChannelOption.SO_BACKLOG, 128)
+          .childOption(ChannelOption.SO_KEEPALIVE, true)
           .childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(SocketChannel ch) throws Exception {
               ChannelPipeline ph = ch.pipeline();
-              ph.addLast("encoder",new MessageEncoder());
-              ph.addLast("decoder",new MessageDecoder());
-              ph.addLast("aggregator", new HttpObjectAggregator(10*1024*1024));//把单个http请求转为FullHttpReuest或FullHttpResponse
+              ph.addLast(new IdleStateHandler(10, 0, 0, TimeUnit.SECONDS));
+              ph.addLast("decoder",new StringDecoder());
+              ph.addLast("encoder",new StringEncoder());
               ph.addLast("handler", new RpcServerHandler());// 服务端业务逻辑
             }
-          })
-          .option(ChannelOption.SO_BACKLOG, 128)
-          .childOption(ChannelOption.SO_KEEPALIVE, true);
+          });
+
 
       ChannelFuture f = b.bind(port).sync();
       System.out.println("服务端启动成功...");
@@ -60,7 +65,7 @@ public class RpcProvider {
   }
 
   public static void main(String[] args) {
-    RpcProvider server = new RpcProvider(8080);
+    RpcProvider server = new RpcProvider(9988);
     server.run();
   }
 

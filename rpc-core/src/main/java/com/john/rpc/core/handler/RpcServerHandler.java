@@ -22,13 +22,15 @@ public class RpcServerHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-    MsgBase readMsg = (MsgBase) msg;
-    BodyMsg body = getBody(readMsg.getBody());
+    System.out.println("123123:" + msg);
+//    MsgBase readMsg = (MsgBase) msg;
 
+//    BodyMsg body = getBody(readMsg.getBody());
+//    System.out.println(body);
     //进行方法的调用处理
-    Class clazz = Class.forName(body.getClazzName());
-    Method meth = clazz.getMethod(body.getMethodName(), body.getParamTyeps());
-    Object invoke = meth.invoke(clazz.newInstance(), body.getParams());
+//    Class clazz = Class.forName(body.getClazzName());
+//    Method meth = clazz.getMethod(body.getMethodName(), body.getParamTyeps());
+//    Object invoke = meth.invoke(clazz.newInstance(), body.getParams());
 
   }
 
