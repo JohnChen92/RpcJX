@@ -1,4 +1,4 @@
-package com.demo.rpc.server.handler;
+package com.john.rpc.core.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -15,7 +15,6 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.util.CharsetUtil;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 
 public class RpcServerHandler extends ChannelInboundHandlerAdapter {
 

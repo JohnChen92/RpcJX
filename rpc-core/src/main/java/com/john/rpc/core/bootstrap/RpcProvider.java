@@ -1,10 +1,9 @@
-package com.demo.rpc.server;
+package com.john.rpc.core.bootstrap;
 
-import com.demo.rpc.server.handler.RpcServerHandler;
+import com.john.rpc.core.handler.RpcServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -14,11 +13,11 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 
-public class RpcServer {
+public class RpcProvider {
 
   private int port;
 
-  public RpcServer(int port) {
+  public RpcProvider(int port) {
     this.port = port;
   }
 
@@ -59,7 +58,7 @@ public class RpcServer {
   }
 
   public static void main(String[] args) {
-    RpcServer server = new RpcServer(8080);
+    RpcProvider server = new RpcProvider(8080);
     server.run();
   }
 

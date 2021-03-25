@@ -1,4 +1,4 @@
-package com.demo.rpc.server.provider;
+package com.john.rpc.provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

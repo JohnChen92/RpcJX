@@ -1,4 +1,4 @@
-package com.demo.rpc.client;
+package com.john.rpc.core.bootstrap;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -9,7 +9,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-public class RpcClient {
+public class RpcConsumer {
 
   public static void main(String[] args) throws Exception {
     String host = args[0];
