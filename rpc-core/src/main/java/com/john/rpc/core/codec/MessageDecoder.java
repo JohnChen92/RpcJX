@@ -17,9 +17,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
         }
         // 标记开始读取位置
         byteBuf.markReaderIndex();
-
         int magic_number = byteBuf.readInt();
-
         if (MAGIC_NUMBER != magic_number) {
             ctx.close();
             return;
@@ -27,7 +25,6 @@ public class MessageDecoder extends ByteToMessageDecoder {
 
         @SuppressWarnings("unused")
         byte version = byteBuf.readByte();
-
         byte type = byteBuf.readByte();
         int squence = byteBuf.readInt();
         int length = byteBuf.readInt();

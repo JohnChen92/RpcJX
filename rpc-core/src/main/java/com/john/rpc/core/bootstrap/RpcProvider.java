@@ -1,9 +1,12 @@
 package com.john.rpc.core.bootstrap;
 
+import com.john.rpc.core.codec.MessageDecoder;
+import com.john.rpc.core.codec.MessageEncoder;
 import com.john.rpc.core.handler.RpcServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -33,16 +36,15 @@ public class RpcProvider {
             @Override
             public void initChannel(SocketChannel ch) throws Exception {
               ChannelPipeline ph = ch.pipeline();
-              ph.addLast("encoder",new HttpResponseEncoder());
-              ph.addLast("decoder",new HttpRequestDecoder());
+              ph.addLast("encoder",new MessageEncoder());
+              ph.addLast("decoder",new MessageDecoder());
               ph.addLast("aggregator", new HttpObjectAggregator(10*1024*1024));//把单个http请求转为FullHttpReuest或FullHttpResponse
               ph.addLast("handler", new RpcServerHandler());// 服务端业务逻辑
             }
-          });
-//          .option(ChannelOption.SO_BACKLOG, 128)
-//          .childOption(ChannelOption.SO_KEEPALIVE, true);
+          })
+          .option(ChannelOption.SO_BACKLOG, 128)
+          .childOption(ChannelOption.SO_KEEPALIVE, true);
 
-      // Bind and start to accept incoming connections.
       ChannelFuture f = b.bind(port).sync();
       System.out.println("服务端启动成功...");
 

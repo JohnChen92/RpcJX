@@ -29,7 +29,7 @@ public class RpcConsumer {
       });
 
       // Start the client.
-      ChannelFuture f = b.connect(host, port).sync(); // (5)
+      ChannelFuture f = b.connect(host, port).sync();
 
       // Wait until the connection is closed.
       f.channel().closeFuture().sync();

@@ -6,6 +6,9 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
+/**
+ * Encoder
+ */
 public class MessageEncoder extends MessageToByteEncoder<MsgBase> {
 
     private static final String DEFAULT_ENCODE = "utf-8";
@@ -23,11 +26,8 @@ public class MessageEncoder extends MessageToByteEncoder<MsgBase> {
         }
 
         writer.writeInt(MAGIC_NUMBER);
-
         writer.writeByte(1);
-
         writer.writeByte(msg.getType());
-
         writer.writeInt(msg.getSequence());
 
         if (null == body || 0 == body.length) {

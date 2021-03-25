@@ -1,5 +1,7 @@
 package com.john.rpc.core.handler;
 
+import com.john.rpc.core.meta.BodyMsg;
+import com.john.rpc.core.meta.MsgBase;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -19,23 +21,15 @@ import java.lang.reflect.Method;
 public class RpcServerHandler extends ChannelInboundHandlerAdapter {
 
   @Override
-  public void channelRead(ChannelHandlerContext ctx, Object msg)
-      throws Exception {
-    //基于Http处理
-    FullHttpRequest httpRequest = (FullHttpRequest)msg;
-    String path = httpRequest.uri();
-    String body = getBody(httpRequest);
-    HttpMethod method = httpRequest.method();
-    HttpHeaders headers = httpRequest.headers();
-    System.out.println("path:" + path + "  body:" + body + "  method:" + method);
+  public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    MsgBase readMsg = (MsgBase) msg;
+    BodyMsg body = getBody(readMsg.getBody());
 
     //进行方法的调用处理
-    Class clazz = Class.forName("com.demo.rpc.server.provider.TestProviderA");
-    Method meth = clazz.getMethod("getMsg", String.class);
-    Object invoke = meth.invoke(clazz.newInstance(), "123123");
+    Class clazz = Class.forName(body.getClazzName());
+    Method meth = clazz.getMethod(body.getMethodName(), body.getParamTyeps());
+    Object invoke = meth.invoke(clazz.newInstance(), body.getParams());
 
-    //Http的返回
-    send(ctx,"ok",HttpResponseStatus.OK);
   }
 
   /**
@@ -54,12 +48,12 @@ public class RpcServerHandler extends ChannelInboundHandlerAdapter {
 
   /**
    * 获取body参数
-   * @param request
+   * @param body
    * @return
    */
-  private String getBody(FullHttpRequest request){
-    ByteBuf buf = request.content();
-    return buf.toString(CharsetUtil.UTF_8);
+  private BodyMsg getBody(String body ){
+
+    return null;
   }
 
   /**
